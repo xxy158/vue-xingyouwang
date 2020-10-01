@@ -1,2 +1,19 @@
-# vue-xingyouwang
-@vue/cli 基于node.js的旅游推荐系统
+# vue-cli3-first
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
