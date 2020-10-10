@@ -72,6 +72,9 @@ export default {
         color: rgba(255, 255, 255, 1);
         letter-spacing: 1px;
         overflow: hidden;
+        position: absolute;
+        left: 0;
+        bottom: 0;
     }
     .footer_bottom {
         display: flex;

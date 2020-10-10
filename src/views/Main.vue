@@ -1,16 +1,15 @@
 <template>
     <div class="main">
-        <headers></headers>
         <!-- 轮播图 -->
         <div class="swiper-container lunbo">
             <div class="swiper-wrapper" id="bannerList">
-                <div class="swiper-slide" onclick="window.open('./recommentDetails.html')"><img
+                <div class="swiper-slide"><img
                         src="https://b1-q.mafengwo.net/s16/M00/19/EF/CoUBUl6DJMGAWFe4ACR13B4-bt8760.png?imageMogr2%2Finterlace%2F1"
                         alt=""></div>
-                <div class="swiper-slide" onclick="window.open('./recommentDetails.html')"><img
+                <div class="swiper-slide"><img
                         src="http://b1-q.mafengwo.net/s15/M00/55/42/CoUBGV31OMKAJYRyAA7X007gsCE55.jpeg?imageMogr2%2Fstrip"
                         alt=""></div>
-                <div class="swiper-slide" onclick="window.open('./recommentDetails.html')"><img
+                <div class="swiper-slide"><img
                         src="http://n1-q.mafengwo.net/s15/M00/83/CE/CoUBGV4PYT2AenxpABJu17BCfsw23.jpeg?imageMogr2%2Fstrip"
                         alt=""></div>
             </div>
@@ -25,34 +24,23 @@
                 <div class="recomcourse">
                     <span class="coursetitle"> 热门推荐</span>
                     <div class="more">
-                        <a href="./recomment.html" class="more_name">
+                        <router-link to="/header/recoment">
                             <span>更多</span>
                             <img src="../assets/image/more.png" alt="">
-                        </a>
+                        </router-link>
                     </div>
                 </div>
                 <ul class="recomeEach" id="recomeEach">
-                    <li onclick="window.open('./recommentDetails.html')">
+                    <li v-for="(item,index) in jingqus" :class="{'on':item.showscal}" :key="item.id" @mouseenter='enter(item)' @mouseleave='leave(item)' @click="jump(item)">
                         <div class="coursecover">
-                            <img src="../assets/image/hot.jpg" alt="">
+                            <img :src="item.cover" alt="" onerror="this.src='../assets/image/hot.jpg'">
                         </div>
-                        <p class="course_title">十度线西栅-野外烧烤-水锦川-出发-玻璃态探秘水溶的那个--休闲拓展2</p>
+                        <p class="course_title">{{item.introduce}}</p>
                         <div class="price_time">
-                            <p class="price">￥187.00<span>起</span></p>
-                            <p class="time">3天</p>
+                            <p class="price">￥{{item.price}}.00<span>起</span></p>
+                            <p class="time">{{item.days}}天</p>
                         </div>
                     </li>
-                    <li>
-                        <div class="coursecover">
-                            <img src="../assets/image/hot.jpg" alt="">
-                        </div>
-                        <p class="course_title">十度线西栅-野外烧烤-水锦川-出发-玻璃态探秘水溶的那个--休闲拓展2</p>
-                        <div class="price_time">
-                            <p class="price">￥187.00<span>起</span></p>
-                            <p class="time">3天</p>
-                        </div>
-                    </li>
-
                 </ul>
             </div>
             <div class="recomment twicerecomment">
@@ -60,10 +48,10 @@
                     <div class="recomcourse">
                         <span class="coursetitle">旅游资讯</span>
                         <div class="more">
-                            <a href="./message.html" class="more_name">
+                            <router-link to="/header/message">
                                 <span>更多</span>
                                 <img src="../assets/image/more.png" alt="">
-                            </a>
+                            </router-link>
                         </div>
                     </div>
                     <ul class="messageEach">
@@ -94,41 +82,27 @@
                     <div class="recomcourse">
                         <span class="coursetitle">游记分享</span>
                         <div class="more">
-                            <a href="./share.html" class="more_name">
+                            <router-link to="/header/share">
                                 <span>更多</span>
                                 <img src="../assets/image/more.png" alt="">
-                            </a>
+                            </router-link>
                         </div>
                     </div>
                     <ul class="messageEach" id="shareeach">
-                        <li onclick="window.open('./shareDetails.html')">
+                        <li v-for="(item,index) in shares" :key="item.id" @click="jumpshare(item)">
                             <div class="text_mess">
-                                <p class="title_content">“伪旅行”，正在掏空当代中国人！</p>
-                                <p class="createtime">2019-06-11</p>
+                                <p class="title_content">{{item.title}}</p>
+                                <p class="createtime">{{item.ctime}}</p>
                             </div>
-                            <img src="../assets/image/hot.jpg" alt="“伪旅行”，正在掏空当代中国人！">
+                            <img :src="item.cover" :alt="item.title" onerror="this.src='../assets/image/hot.jpg'">
                         </li>
-                        <li>
-                            <div class="text_mess">
-                                <p class="title_content">“伪旅行”，正在掏空当代中国人！</p>
-                                <p class="createtime">2019-06-11</p>
-                            </div>
-                            <img src="../assets/image/hot.jpg" alt="“伪旅行”，正在掏空当代中国人！">
-                        </li>
-                        <li>
-                            <div class="text_mess">
-                                <p class="title_content">“伪旅行”，正在掏空当代中国人！</p>
-                                <p class="createtime">2019-06-11</p>
-                            </div>
-                            <img src="../assets/image/hot.jpg" alt="“伪旅行”，正在掏空当代中国人！">
-                        </li>
-
                     </ul>
                 </div>
             </div>
         </div>
         <footers></footers>
         <evelator></evelator>
+        <login v-show="loginbool" @closelogin="changelb"></login>
     </div>
 </template>
 
@@ -137,7 +111,56 @@
 
     export default {
         name: '',
+        data() {
+            return {
+                loginbool:false,
+                jingqus:[],
+                shares:[]
+            }
+        },
+        methods:{
+            changelb(){
+                this.loginbool=!this.loginbool
+            },
+            jingqu(){
+                this.$axios.get('travel/getjingqus').then(res=>{
+                    if(res){
+                        res.data.data.forEach(item=>{
+                            this.$set(item,'showscal',false)
+                        })
+                        this.jingqus=res.data.data
+                    }
+                })
+            },
+            // 移入移出图片放大
+            enter(item){
+                this.$set(item,'showscal',true)
+            },
+            leave(item){
+                this.$set(item,'showscal',false)
+            },
+            share(){
+                this.$axios.get('travel/shares').then(res=>{
+                    if(res){
+                        this.shares=res.data.data
+                    }
+                })
+            },
+            jump(item){
+                localStorage.setItem('viewdetails',JSON.stringify(item))
+                this.$router.push('/header/recomdetails')
+            },
+            jumpshare(item){
+                this.$router.push('/header/sharedetails')
+            }
+        },
         mounted() {
+            this.jingqu()
+            this.share()
+            if(this.$route.params.showlogin){
+                this.changelb()
+            }
+            // this.$route.params.showlogin
             var mySwiper = new Swiper('.swiper-container', {
                 loop: true,
                 speed: 300,
@@ -161,7 +184,7 @@
 
 <style scoped lange="less">
     @import '../assets/cssC/swiper.min.css';
-
+    
     /* 轮播 */
     .lunbo {
         width: 100%;

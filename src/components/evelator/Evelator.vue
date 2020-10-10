@@ -1,23 +1,23 @@
 <template>
     <div class="evelator">
-        <div class="first" onclick="canopen()">
+        <router-link to="/header/customized" tag="div" class="first">
             <a href="javascript:void(0)">专属<br>推荐</a>
-        </div>
+        </router-link>
         <div>
-            <a href="javascript:void(0)" class="hoverdisp">
+            <a href="javascript:void(0)" class="" @mouseenter="enter($event)" @mouseleave="leave($event)">
                 <span class="iconfont icon-search"></span>
-                <div class="introduce" id="tosearch">点击搜索</div>
+                <div class="introduce" @click="tosearch">点击搜索</div>
             </a>
         </div>
         <div>
-            <a href="javascript:void(0)" class="hoverdisp">
+            <a href="javascript:void(0)" class="" @mouseenter="enter($event)" @mouseleave="leave($event)">
                 <span class="iconfont icon-prompt"></span>
-                <div class="introduce" onclick="toAdvice()">留言反馈</div>
+                <div class="introduce" @click="toadvice">留言反馈</div>
             </a>
         </div>
         <div>
-            <a href="javascript:void(0)" class="hoverdisp">
-                <span class="iconfont icon-scanQR"></span>
+            <a href="javascript:void(0)" class="" @mouseenter="enter($event)" @mouseleave="leave($event)">
+                <span class="iconfont icon-scanning"></span>
                 <div class="introduce last">
                     <p class="oursImg">
                         <img src="../../assets/image/erweima.png" alt="">
@@ -26,13 +26,53 @@
                 </div>
             </a>
         </div>
-        <span class="backTop" href="javascript:void(0);"><img src="../../assets/image/topTop.png" alt=""></span>
+        <span class="backTop" @click="turnup" v-show="toback"><img src="../../assets/image/topTop.png" alt=""></span>
     </div>
 </template>
 
 <script>
 export default {
-    name: ''
+    name: '',
+    data() {
+        return {
+            isshow:false,
+            toback:false
+        }
+    },
+    mounted() {
+        window.addEventListener('scroll',this.scrolls)
+    },
+    methods:{
+        turnup(){
+            window.scrollTo(0,0)
+        },
+        enter($event){
+            $event.currentTarget.className="hoverdisp"
+        },
+        leave($event){
+            $event.currentTarget.className=""
+        },
+        tosearch(){
+            this.$router.push({
+                path: '/header/recoment',
+                name: 'recoment', 
+                params: {
+                    befocus:true
+                }
+            })
+        },
+        scrolls(e){
+            var top = e.srcElement.scrollingElement.scrollTop;    // 获取页面滚动高度
+            if (top > 300) {
+                this.toback=true
+            }else{
+                this.toback=false
+            }
+        },
+        toadvice(){
+            this.$router.push('/header/platform/advice')
+        }
+    }
 }
 </script>
 
@@ -90,10 +130,6 @@ export default {
     .evelator>div:last-of-type::after{
         display: none;
     }
-    .introduce,
-    .backTop{
-        display: none;
-    }
     
     .introduce {
         width: 200px;
@@ -110,10 +146,29 @@ export default {
         top: 0;
         transition: all .3s;
         z-index: -1;
+        opacity: 0;
     }
-    .introduce.show{
+    .hoverdisp .introduce{
+        opacity: 1;
+        right: 102px;
+    }
+    /* .introduce.isshoow{
+        opacity: 1;
         display: block;
+        right: 102px;
+    } */
+    /* .v-enter {
+        right: -320px;
+        opacity: 0;
     }
+    .v-enter-active {
+        transition: all .5s;
+    }
+    .v-enter-to{
+        opacity: 1;
+        right: 102px;
+    } */
+    
     .introduce.last {
         width: 250px;
         height: 270px;

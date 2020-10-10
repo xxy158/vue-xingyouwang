@@ -1,6 +1,5 @@
 <template>
     <div>
-        <headers></headers>
         <div class="contence">
             <div class="custom">
                 <p class="title_custom">我的专属推荐</p>
@@ -9,39 +8,81 @@
             <div class="needs">
                 <div class="neddEach">
                     <label for="">地理环境</label>
-                    <textarea name="" id="huanjing" placeholder="请输入您期望的地理环境"></textarea>
+                    <textarea name="" v-model="huanjing" placeholder="请输入您期望的地理环境"></textarea>
                 </div>
                 <div class="neddEach">
                     <label for="">饮食文化</label>
-                    <textarea name="" id="yinshi" placeholder="请输入您期望的饮食文化"></textarea>
+                    <textarea name="" v-model="yinshi" placeholder="请输入您期望的饮食文化"></textarea>
                 </div>
                 <div class="neddEach">
                     <label for="">交通情况</label>
-                    <textarea name="" id="jiaotong" placeholder="请输入您期望的交通情况"></textarea>
+                    <textarea name="" v-model="jiaotong" placeholder="请输入您期望的交通情况"></textarea>
                 </div>
                 <div class="neddEach">
                     <label for="">兴趣爱好</label>
-                    <textarea name="" id="aihao" placeholder="请输入您期望的兴趣爱好"></textarea>
+                    <textarea name="" v-model="aihao" placeholder="请输入您期望的兴趣爱好"></textarea>
                 </div>
                 <div class="neddEach">
                     <label for="">周边设施</label>
-                    <textarea name="" id="sheshi" placeholder="请输入您期望的周边设施（酒店，餐饮等）"></textarea>
+                    <textarea name="" v-model="sheshi" placeholder="请输入您期望的周边设施（酒店，餐饮等）"></textarea>
                 </div>
                 <div class="neddEach">
                     <label for="">消费水平</label>
-                    <textarea name="" id="xiaofei" placeholder="请输入您期望的消费水平"></textarea>
+                    <textarea name="" v-model="xiaofei" placeholder="请输入您期望的消费水平"></textarea>
                 </div>
-                <div class="tijiao">提交</div>
+                <div class="tijiao" @click="tijiao">提交</div>
             </div>
         </div>
         <footers></footers>
         <evelator></evelator>
+        <login v-show="loginbool" @closelogin="changelb"></login>
     </div>
 </template>
 
 <script>
     export default {
-        name: ''
+        name: '',
+        data() {
+            return {
+                loginbool:false,
+                huanjing:'',
+                yinshi:'',
+                jiaotong:'',
+                aihao:'',
+                sheshi:'',
+                xiaofei:''
+            }
+        },
+        methods:{
+            changelb(){
+                this.loginbool=!this.loginbool
+            },
+            tijiao(){
+                let params={}
+                params.huanjing=this.huanjing
+                params.yinshi=this.yinshi
+                params.jiaotong=this.jiaotong
+                params.aihao=this.aihao
+                params.sheshi=this.sheshi
+                params.xiaofei=this.xiaofei
+                if(!this.huanjing&&!this.yinshi&&!this.jiaotong&&!this.aihao&&!this.sheshi&&!this.xiaofei){
+                    layer.msg("请输入至少一项您期望的景区要求");
+                    return;
+                }
+                this.$axios.get('/travel/jingquCustomized',{params:params}).then(res=>{
+                    if(res){
+                        this.$layer.msg(res.data.msg+"，即将跳转结果页")
+                        this.$router.push({
+                            name:'customdetail',
+                            // path:'/header/customdetail',
+                            params:{
+                                customviews:JSON.stringify(res.data.data)
+                            }
+                        })
+                    }
+                })
+            }
+        },
     }
 </script>
 

@@ -1,7 +1,7 @@
-import evelator from'./Evelator.vue'
-const eve={
+import evelators from'./Evelator.vue'
+const evelator={
     install(Vue){
-        Vue.component('evelator',evelator)
+        Vue.component('evelator',evelators)
     }
 }
-export default eve
+export default evelator

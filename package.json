@@ -12,6 +12,7 @@
     "postcss-px-to-viewport": "^1.1.1",
     "swiper": "^6.3.2",
     "vue": "^2.6.11",
+    "vue-layer": "^1.2.1",
     "vue-router": "^3.2.0"
   },
   "devDependencies": {

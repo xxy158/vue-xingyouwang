@@ -1,12 +1,11 @@
 <template>
     <div>
-        <headers></headers>
         <div class="contence">
-            <p class="home"><a href="./main.html">首页</a>><span>景区</span></p>
+            <p class="home"><a href="#/header/main">首页</a>><span>景区</span></p>
             <div class="online_search">
                 <div class="selectjob">景区</div>
-                <input type="text" class="search_word" id="keyword" placeholder="请输入您期望景区的关键词" autocomplete="off">
-                <div class="tosee" onclick="searchCourse()">
+                <input type="text" class="search_word" ref="seakey" v-model="keyword" placeholder="请输入您期望景区的关键词" autocomplete="off" @keypress="keysearch">
+                <div class="tosee" @click="searchCourse()">
                     <img src="../assets/image/search_rgba.png" alt="">
                     <div>搜索</div>
                 </div> 
@@ -14,38 +13,94 @@
             <div class="history_search">
                 <div class="history_title">历史搜索：</div>
                 <ul class="search_his">
-                    <!-- <li>UI设计师</li>
-                    <li>产品经理</li>
-                    <li>产品总监</li>
-                    <li>商务部负责人</li> -->
+                    <li>UI设计师</li>
                 </ul>
             </div>
             <div class="allcourses">
                 <div class="recomment">
                     <ul class="recomeEach" id="recomeEach">
-                        <li onclick="window.open('./recommentDetails.html')">
+                        <li v-for="(item,index) in jingqus" :class="{'on':item.showscal}" :key="item.id" @click="jump(item)">
                             <div class="coursecover">
-                                <img src="../assets/image/hot.jpg" alt="">
+                                <img :src="item.cover" alt="" onerror="this.src='../assets/image/hot.jpg'">
                             </div>
-                            <p class="course_title">十度线西栅-野外烧烤-水锦川-出发-玻璃态探秘水溶的那个--休闲拓展2</p>
+                            <p class="course_title">{{item.introduce}}</p>
                             <div class="price_time">
-                                <p class="price">￥187.00<span>起</span></p>
-                                <p class="time">3天</p>
+                                <p class="price">￥{{item.price}}.00<span>起</span></p>
+                                <p class="time">{{item.days}}天</p>
                             </div>
                         </li>
-                        
                     </ul>
                 </div>
             </div>
         </div>
         <footers></footers>
         <evelator></evelator>
+        <login v-show="loginbool" @closelogin="changelb"></login>
     </div>
 </template>
 
 <script>
-export default {
-    name: ''
+    export default {
+        name: '',
+        data() {
+            return {
+                loginbool:false,
+                jingqus:[],
+                keyword:''
+            }
+        },
+        methods:{
+            changelb(){
+                console.log(this)
+                this.loginbool=!this.loginbool
+            },
+            jingqu(){
+                this.$axios.get('/travel/getjingqus').then(res=>{
+                    if(res){
+                        this.jingqus=res.data.data
+                    }
+                })
+            },
+            searchCourse(key){
+                let keyparam={}
+                if(key){
+                    keyparam.keyword=key
+                }else{
+                    keyparam.keyword=this.keyword
+                }
+                if(keyparam.keyword){
+                    this.$axios.get('/travel/getjingqus',{params:keyparam}).then(res=>{
+                        if(res){
+                            this.jingqus=res.data.data
+                        }
+                    })
+                }else{
+                    layer.msg("请输入您想要搜索的内容")
+                }
+            },
+            keysearch(e){
+                var keycode = e.keyCode;
+                if(keycode=='13') {
+                    e.preventDefault();
+                    this.searchCourse()
+                }
+            },
+            jump(item){
+                localStorage.setItem('viewdetails',JSON.stringify(item))
+                this.$router.push('/header/recomdetails')
+            }
+        },
+        mounted() {
+            this.jingqu()
+            if(this.$route.params.befocus){
+                this.$refs.seakey.focus()
+            }
+            if(this.$route.params.gosearch){
+                this.keyword=this.$route.params.gosearch
+                this.searchCourse(this.$route.params.gosearch)
+            }
+            // this.$route.params.gosearch
+        },
 }
 </script>
 
@@ -119,6 +174,7 @@ export default {
         top: 0;
         display: flex;
         align-items: center;
+        cursor: pointer;
         width:160px;
         height:80px;
         background:rgba(17,123,241,1);

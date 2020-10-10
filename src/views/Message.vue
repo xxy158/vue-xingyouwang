@@ -1,8 +1,7 @@
 <template>
     <div>
-        <headers></headers>
         <div class="contence">
-            <p class="home"><a href="./main.html">首页</a>><span>旅游资讯</span></p>
+            <p class="home"><a href="#/header/main">首页</a>><span>旅游资讯</span></p>
             <div class="online_search">
                 <div class="selectjob">资讯</div>
                 <input type="text" class="search_word" id="keyword" placeholder="请输入您期望资讯的关键词" autocomplete="off">
@@ -82,12 +81,23 @@
         </div>
         <footers></footers>
         <evelator></evelator>
+        <login v-show="loginbool" @closelogin="changelb"></login>
     </div>
 </template>
 
 <script>
     export default {
-        name: ''
+        name: '',
+        data() {
+            return {
+                loginbool:false
+            }
+        },
+        methods:{
+            changelb(){
+                this.loginbool=!this.loginbool
+            }
+        },
     }
 </script>
 

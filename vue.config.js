@@ -6,17 +6,15 @@ module.exports = {
         port: 3000,
         hotOnly: false, // 热更新
         proxy: {
-            '/': { // 本地mock服务器
-                target: 'http://localhost:9093',
+            '/travel': { // 本地mock服务器
+                target: 'http://localhost:3555/travel/',
                 changeOrigin: true,
-                ws: false
+                ws: true,
+                pathRewrite:{
+                  '^/travel':''
+                }
             }
-            // '/': { // 测试环境服务器
-            //   target: 'http://103.28.214.24:24080',
-            //   changeOrigin: true,
-            //   ws: false
-            // }
-        } // 设置代理
+        }
     },
     css: {
         extract: false,//false表示开发环境,true表示生成环境

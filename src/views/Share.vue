@@ -1,8 +1,7 @@
 <template>
     <div>
-        <headers></headers>
         <div class="contence">
-            <p class="home"><a href="./main.html">首页</a>><span>游记分享</span></p>
+            <p class="home"><a href="#/header/main">首页</a>><span>游记分享</span></p>
             <!-- <div class="online_search">
                 <div class="selectjob">资讯</div>
                 <input type="text" class="search_word" id="keyword" placeholder="请输入您期望资讯的关键词" autocomplete="off">
@@ -35,63 +34,17 @@
                             <li class="check">热门游记</li>
                             <li>最新发表</li>
                         </ul>
-                        <div class="towrite" onclick="window.open('./writeshare.html')"><span
+                        <div class="towrite" @click="jumpwriteshare"><span
                                 class="iconfont icon-edit"></span>写游记</div>
                     </div>
                     <ul class="messageEach">
-                        <li onclick="window.open('./shareDetails.html')">
-                            <img src="../assets/image/hot.jpg" alt="“伪旅行”，正在掏空当代中国人！">
+                        <li v-for="(item,index) in shares" :key="item.id" @click="jump(item)">
+                            <img :src="item.cover" :alt="item.title" onerror="this.src='../assets/image/hot.jpg'">
                             <div class="text_mess">
-                                <p class="title_content">“伪旅行”，正在掏空当代中国人！</p>
-                                <p class="messscontent">
-                                    当你老了，回看自己的一生，才发现似乎一直都在上演着“错过”。10岁时，我们总会羡慕20岁的人，因为他们能买的起我们买不起的玩具;可当我们能买得起当年 ...</p>
+                                <p class="title_content">{{item.title}}</p>
+                                <p class="messscontent">{{item.content}}</p>
                                 <p class="createtime">
-                                    <span>2019-06-11</span>
-                                    <span class="like">
-                                        <img src="../assets/image/gray_like.png" alt="">
-                                        <span>12</span>
-                                    </span>
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../assets/image/hot.jpg" alt="“伪旅行”，正在掏空当代中国人！">
-                            <div class="text_mess">
-                                <p class="title_content">“伪旅行”，正在掏空当代中国人！</p>
-                                <p class="messscontent">
-                                    当你老了，回看自己的一生，才发现似乎一直都在上演着“错过”。10岁时，我们总会羡慕20岁的人，因为他们能买的起我们买不起的玩具;可当我们能买得起当年 ...</p>
-                                <p class="createtime">
-                                    <span>2019-06-11</span>
-                                    <span class="like">
-                                        <img src="../assets/image/gray_like.png" alt="">
-                                        <span>12</span>
-                                    </span>
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../assets/image/hot.jpg" alt="“伪旅行”，正在掏空当代中国人！">
-                            <div class="text_mess">
-                                <p class="title_content">“伪旅行”，正在掏空当代中国人！</p>
-                                <p class="messscontent">
-                                    当你老了，回看自己的一生，才发现似乎一直都在上演着“错过”。10岁时，我们总会羡慕20岁的人，因为他们能买的起我们买不起的玩具;可当我们能买得起当年 ...</p>
-                                <p class="createtime">
-                                    <span>2019-06-11</span>
-                                    <span class="like">
-                                        <img src="../assets/image/gray_like.png" alt="">
-                                        <span>0</span>
-                                    </span>
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../assets/image/hot.jpg" alt="“伪旅行”，正在掏空当代中国人！">
-                            <div class="text_mess">
-                                <p class="title_content">“伪旅行”，正在掏空当代中国人！</p>
-                                <p class="messscontent">
-                                    当你老了，回看自己的一生，才发现似乎一直都在上演着“错过”。10岁时，我们总会羡慕20岁的人，因为他们能买的起我们买不起的玩具;可当我们能买得起当年 ...</p>
-                                <p class="createtime">
-                                    <span>2019-06-11</span>
+                                    <span>{{item.ctime}}</span>
                                     <span class="like">
                                         <img src="../assets/image/gray_like.png" alt="">
                                         <span>0</span>
@@ -105,12 +58,40 @@
         </div>
         <footers></footers>
         <evelator></evelator>
+        <login v-show="loginbool" @closelogin="changelb"></login>
     </div>
 </template>
 
 <script>
     export default {
-        name: ''
+        name: '',
+        data() {
+            return {
+                loginbool:false,
+                shares:''
+            }
+        },
+        methods:{
+            changelb(){
+                this.loginbool=!this.loginbool
+            },
+            share(){
+                this.$axios.get('travel/shares').then(res=>{
+                    if(res){
+                        this.shares=res.data.data
+                    }
+                })
+            },
+            jump(){
+                this.$router.push('/header/sharedetails')
+            },
+            jumpwriteshare(){
+                this.$router.push('/header/writeshare')
+            }
+        },
+        mounted() {
+            this.share()
+        },
     }
 </script>
 
