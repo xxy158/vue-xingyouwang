@@ -146,7 +146,9 @@ export default {
     // 使用计算属性的优先使用缓存的特性，解决刷新子组件/子路由数据丢失的问题
     computed: {
         users(){
-            return JSON.parse(localStorage.getItem("users"))[0]
+            if(localStorage.getItem("users")){
+                return JSON.parse(localStorage.getItem("users"))[0]
+            }
         }
     },
 }

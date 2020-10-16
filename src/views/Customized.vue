@@ -73,8 +73,8 @@
                     if(res){
                         this.$layer.msg(res.data.msg+"，即将跳转结果页")
                         this.$router.push({
-                            name:'customdetail',
-                            // path:'/header/customdetail',
+                            name:'customresult',
+                            // path:'/header/customresult',
                             params:{
                                 customviews:JSON.stringify(res.data.data)
                             }

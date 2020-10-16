@@ -111,6 +111,7 @@
 
     export default {
         name: '',
+        inject:['reload'],
         data() {
             return {
                 loginbool:false,
@@ -157,10 +158,6 @@
         mounted() {
             this.jingqu()
             this.share()
-            if(this.$route.params.showlogin){
-                this.changelb()
-            }
-            // this.$route.params.showlogin
             var mySwiper = new Swiper('.swiper-container', {
                 loop: true,
                 speed: 300,
@@ -178,6 +175,18 @@
                     prevEl: '.swiper-button-prev',
                 },
             })
+        },
+        watch: {
+            'showlogin':function(newVal,oldVal){
+                if(newVal){
+                    this.changelb()
+                }
+            }
+        },
+        computed: {
+            showlogin(){
+                return this.$route.params.showlogin
+            }
         },
     }
 </script>
